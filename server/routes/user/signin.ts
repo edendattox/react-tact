@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { body } from "express-validator";
+import { body, cookie } from "express-validator";
 import jwt from "jsonwebtoken";
 
 import { Password } from "../../utils/password";
@@ -21,6 +21,8 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
+
+    const { cookie } = req.headers;
 
     const existingUser = await User.findOne({ email });
 
@@ -55,7 +57,7 @@ router.post(
       jwt: userJwt,
     };
 
-    res.status(200).send({ existingUser });
+    res.status(200).send({ existingUser, userJwt });
   }
 );
 

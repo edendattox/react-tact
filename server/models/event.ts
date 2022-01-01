@@ -2,20 +2,22 @@ import mongoose from "mongoose";
 
 interface EventAttrs {
   title: string;
-  details: string;
+  detail: string;
   date: number;
   location: string;
-}
-
-interface EventDoc extends mongoose.Document {
-  title: string;
-  details: string;
-  date: number;
-  location: string;
+  // userID: string;
 }
 
 interface EventModel extends mongoose.Model<EventDoc> {
   build(attrs: EventAttrs): EventDoc;
+}
+
+interface EventDoc extends mongoose.Document {
+  title: string;
+  detail: string;
+  date: number;
+  location: string;
+  // userID: string;
 }
 
 const eventSchema = new mongoose.Schema(
@@ -24,12 +26,12 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    details: {
+    detail: {
       type: String,
       required: true,
     },
     date: {
-      type: Number,
+      type: String,
       required: true,
     },
     location: {
@@ -53,6 +55,6 @@ eventSchema.statics.build = (attrs: EventAttrs) => {
   return new Event(attrs);
 };
 
-const Event = mongoose.model<EventDoc, EventModel>("Event", eventSchema);
+const Event = mongoose.model<EventDoc, EventModel>("NewEvents", eventSchema);
 
 export { Event };

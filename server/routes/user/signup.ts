@@ -31,7 +31,6 @@ router.post(
     await user.save();
 
     // Generate JWT
-
     const payload = {
       username: user.username,
       id: user.id,
@@ -48,7 +47,9 @@ router.post(
       jwt: userJwt,
     };
 
-    res.status(201).send(user);
+    console.log(req.headers.authorization);
+
+    res.status(201).send({ user, userJwt });
   }
 );
 
