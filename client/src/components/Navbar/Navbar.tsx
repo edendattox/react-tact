@@ -3,22 +3,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useToken } from '../../customHooks/use-token';
 import * as Styles from "./styles"
 
+const {useEffect, useState} = React;
 
 const { Container, Wrapper, CreateEvent, Left, Logo, LogoImg, Center, Right, MenuItem }  = Styles;
 
-
-
 export const Navbar:React.FC = () => {
-  const [token] = useToken();
-
+  const [user, setUser] = useState(false);
+  
   const navigate = useNavigate();
-
+  
   const logOut = () => {
     localStorage.removeItem("token");
     // @ts-ignore
+    console.log('comeback again');
     navigate("/login");
   };
+
+  const isAuthenticated: boolean = !!localStorage.getItem("token")
   
+
+  useEffect(() => {
+    setUser(isAuthenticated)
+  }, [user, isAuthenticated])
 
 
   return (
@@ -35,18 +41,25 @@ export const Navbar:React.FC = () => {
         </Link>
       </Left>
       <Center>
-        <CreateEvent>
         <Link to="/create" style={{ textDecoration: "none" }}>
+        <CreateEvent>
            Create Event
-        </Link>
         </CreateEvent>
+        </Link>
+      </Center>
+      <Center style={{ marginLeft: "20px"}}>
+        <Link to="/" style={{ textDecoration: "none" }}>
+        <CreateEvent>
+          Home
+        </CreateEvent>
+        </Link>
       </Center>
       <Right>
         <Link to="/signup" style={{ textDecoration: "none" }}>
           <MenuItem>REGISTER</MenuItem>
         </Link>
         <Link to="/login" style={{ textDecoration: "none" }}>
-          {token ? (
+          {user ? (
         <MenuItem onClick={logOut}>LOG OUT</MenuItem> 
           ) : 
             <MenuItem>LOG IN</MenuItem>

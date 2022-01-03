@@ -27,9 +27,10 @@ export const SignUp = () => {
          password,
        }
      );
+     console.log('yes, you did it congratulations')
      navigate("/login");
     } catch (error) {
-      
+      console.error('wrong details are provided')
     }
   };
 

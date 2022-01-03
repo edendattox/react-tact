@@ -7,16 +7,26 @@ import {
 } from "react-router-dom";
 import './App.css';
 import { Navbar } from './components/Navbar/Navbar';
+import { useToken } from './customHooks/use-token';
 import Create from './pages/Create/Create';
 import Detail from './pages/Detail/Detail';
 import Home from './pages/Home/Home';
 import {Login} from './pages/Login/Login';
 import {SignUp} from './pages/SignUp/SignUp';
 
+interface IProps {
+  children: any;
+  auth: any;
+}
+
+const Protected = ({auth, children }: IProps) => {   
+  return auth ? children : <Navigate to="/login" />;
+}
+
 const  App:React.FC = () => {
   
-
   const isAuthenticated = !!localStorage.getItem("token");
+
   return (
     <div className="App">
     <Router>
@@ -24,25 +34,19 @@ const  App:React.FC = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={ 
-            isAuthenticated ? (
+            <Protected auth={isAuthenticated} >
               <Home />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </Protected>
         }/>
           <Route path="/detail/event/:id" element={
-              isAuthenticated ? (
-                <Detail />
-              ) : (
-                <Navigate to="/login" />
-              )
+            <Protected auth={isAuthenticated} >
+              <Detail />
+            </Protected>
           } />
           <Route path="/create" element={
-              isAuthenticated ? (
-                <Create />
-              ) : (
-                <Login/>
-              )
+            <Protected auth={isAuthenticated} >
+              <Create />
+            </Protected>
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />

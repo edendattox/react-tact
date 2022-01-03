@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as Styles from "./styles";
@@ -10,7 +10,7 @@ const baseURL: string | undefined = process.env.REACT_APP_BASE_URL;
 
 
 export const Login = () => {
-  const [, setToken] = useToken()
+  const [token, setToken] = useToken()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -24,15 +24,19 @@ export const Login = () => {
         email,
         password,
       });
-      const  {userJwt } = res.data;
+      const {userJwt } = res.data;
       // @ts-ignore
       setToken(userJwt) 
-      navigate("/");
+      navigate("/")
+      console.log('hurray, you successfully logged in')
     } catch (error) {
-      console.log(error)
+      console.error('wrong id or password')
     }
   };
-  
+
+  // useEffect(() => {
+  //    token && navigate('/') 
+  // }, [token])
   
 
   return (
